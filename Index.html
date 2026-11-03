@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Códigos QR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #qrCode {
+            margin-top: 20px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generador de Códigos QR</h1>
+    <input type="text" id="inputText" placeholder="Ingresa texto o URL" style="width: 300px; padding: 10px;">
+    <br>
+    <button onclick="generateQRCode()">Generar QR</button>
+    <button onclick="downloadQRCode()">Descargar QR</button>
+    <button onclick="copyQRCode()">Copiar QR</button>
+    <br>
+    <canvas id="qrCode"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script>
+        const qr = new QRious({
+            element: document.getElementById('qrCode'),
+            size: 250,
+        });
+
+        function generateQRCode() {
+            const input = document.getElementById("inputText").value;
+            if (input) {
+                qr.value = input;
+            } else {
+                alert("Por favor ingresa un texto o URL.");
+            }
+        }
+
+        function downloadQRCode() {
+            const link = document.createElement('a');
+            link.href = document.getElementById('qrCode').toDataURL();
+            link.download = 'codigo_qr.png';
+            link.click();
+        }
+
+        function copyQRCode() {
+            const canvas = document.getElementById('qrCode');
+            canvas.toBlob(blob => {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]);
+                alert("Código QR copiado al portapapeles.");
+            });
+        }
+    </script>
+</body>
+</html>
